@@ -8,36 +8,45 @@ desired_cap = {
  'browser': 'Chrome',
  'browser_version': '83.0',
  'os': 'Windows',
- 'name': 'BStack-[Python] Sample Test', # test name
- 'build': 'BStack Build Number 1',
+ 'name': 'RailsSampleApp', # test name
+ 'build': 'Rails Build Number 1',
  'browserstack.debug':'True' # CI/CD job or build name
 }
 
 class RailsSampleApp(unittest.TestCase):
 
     def setUp(self):
-        self.driver = webdriver.Remote(command_executor='https://haributhirand1:LufW1REAoy75zHPtUVfz@hub-cloud.browserstack.com/wd/hub', desired_capabilities=desired_cap)         
-    
+        self.driver = webdriver.Remote(command_executor='https://haributhirand1:LufW1REAoy75zHPtUVfz@hub-cloud.browserstack.com/wd/hub', desired_capabilities=desired_cap) 
+     
     def test_sign_up(self):
         driver = self.driver
-        driver.implicitly_wait(5)
+        driver.implicitly_wait(5)       
         driver.get("https://blooming-lake-3455.herokuapp.com/")
         elem = driver.find_element_by_xpath('/html/body/div[1]/section/a')
         elem.send_keys(Keys.RETURN)
         #self.assertIn("Rails sample app | Sign up", driver.title)
         elem = driver.find_element_by_xpath('//*[@id="user_name"]')  
-        elem.send_keys("Hari")
+        elem.send_keys('abcd')
         elem = driver.find_element_by_xpath('//*[@id="user_email"]')  
-        elem.send_keys("hari@yahoo.com")
+        elem.send_keys('abc@yahoo.com')
         elem = driver.find_element_by_xpath('//*[@id="user_password"]')  
-        elem.send_keys("123456")
+        elem.send_keys('123456')
         elem = driver.find_element_by_xpath('//*[@id="user_password_confirmation"]')  
-        elem.send_keys("123456")
+        elem.send_keys('123456')
         elem = driver.find_element_by_xpath('//html/body/div/section/form/div[5]/input') 
         elem.send_keys(Keys.RETURN)         
-        print(driver.title) 
+        print(driver.title)
     
-    def test_signin_page(self):
+    def test_multiple_sign_up(self):
+        driver = self.driver       
+        self.test_sign_up()
+        Error = driver.find_element_by_xpath('/html/body/div/section/form/div[1]/ul/li[1]').text
+        if Error == 'Email has already been taken':
+            print('Passed')
+        else:
+            print('Failed')           
+    
+    def test_profile(self):
         driver = self.driver
         driver.implicitly_wait(5)
         driver.get("https://blooming-lake-3455.herokuapp.com/")
@@ -51,9 +60,31 @@ class RailsSampleApp(unittest.TestCase):
         elem = driver.find_element_by_xpath('/html/body/div/section/form/div[3]/input')
         elem.send_keys(Keys.RETURN)        
         print(driver.title)
-          
+        elem = driver.find_element_by_xpath('/html/body/div/header/nav/ul/li[1]/a')
+        elem.send_keys(Keys.RETURN)           
+        elem = driver.find_element_by_xpath('//*[@id="micropost_content"]')
+        elem.send_keys("Good Day")
+        elem = driver.find_element_by_xpath('/html/body/div/section/table/tbody/tr/td[1]/form/div[2]/input')
+        elem.send_keys(Keys.RETURN)  
+        elem = driver.find_element_by_xpath('/html/body/div/header/nav/ul/li[4]/a')               
+        elem.send_keys(Keys.RETURN)          
+        content = driver.find_element_by_xpath('/html/body/div/section/table/tbody/tr/td[1]/table/tbody/tr[1]/td/span[1]').text
+        if content == 'Good Day':
+            print('Passed')
+        else:
+            print('Failed') 
+    
+    def test_help_page(self):
+        driver = self.driver
+        driver.implicitly_wait(5)
+        driver.get("https://blooming-lake-3455.herokuapp.com/")
+        #self.assertIn("Rails sample app | Help", driver.title)
+        elem = driver.find_element_by_xpath('/html/body/div[1]/header/nav/ul/li[2]/a')
+        elem.send_keys(Keys.RETURN)
+        print(driver.title)     
+            
     def tearDown(self):
-        self.driver.close()
-
+        self.driver.close()     
+    
 if __name__ == "__main__":
     unittest.main()
