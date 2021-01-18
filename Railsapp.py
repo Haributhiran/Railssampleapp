@@ -2,6 +2,8 @@ import unittest
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
+#setting up the desired configuration of OS, Browser, Version
+
 desired_cap = {
  'os_version': '10',
  'resolution': '1440x900',
@@ -13,10 +15,16 @@ desired_cap = {
  'browserstack.debug':'True' # CI/CD job or build name
 }
 
+#inheriting unittest framework
+
 class RailsSampleApp(unittest.TestCase):
 
+ #creating instance of browser using remote webdriver and Browserstack URL
+ 
     def setUp(self):
         self.driver = webdriver.Remote(command_executor='https://haributhirand1:LufW1REAoy75zHPtUVfz@hub-cloud.browserstack.com/wd/hub', desired_capabilities=desired_cap) 
+    
+ #Validating the signup functionality     
      
     def test_sign_up(self):
         driver = self.driver
@@ -36,6 +44,8 @@ class RailsSampleApp(unittest.TestCase):
         elem = driver.find_element_by_xpath('//html/body/div/section/form/div[5]/input') 
         elem.send_keys(Keys.RETURN)         
         print(driver.title)
+
+#Validating the 'Email already taken' Error         
     
     def test_multiple_sign_up(self):
         driver = self.driver       
@@ -44,7 +54,9 @@ class RailsSampleApp(unittest.TestCase):
         if Error == 'Email has already been taken':
             print('Passed')
         else:
-            print('Failed')           
+            print('Failed')   
+
+#Validating signin functionality          
     
     def test_profile(self):
         driver = self.driver
@@ -66,6 +78,9 @@ class RailsSampleApp(unittest.TestCase):
         elem.send_keys("Good Day")
         elem = driver.find_element_by_xpath('/html/body/div/section/table/tbody/tr/td[1]/form/div[2]/input')
         elem.send_keys(Keys.RETURN)  
+
+#Validating Micropost functionality 
+
         elem = driver.find_element_by_xpath('/html/body/div/header/nav/ul/li[4]/a')               
         elem.send_keys(Keys.RETURN)          
         content = driver.find_element_by_xpath('/html/body/div/section/table/tbody/tr/td[1]/table/tbody/tr[1]/td/span[1]').text
@@ -73,7 +88,9 @@ class RailsSampleApp(unittest.TestCase):
             print('Passed')
         else:
             print('Failed') 
-    
+
+#Validating help page
+         
     def test_help_page(self):
         driver = self.driver
         driver.implicitly_wait(5)
