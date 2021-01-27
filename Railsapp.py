@@ -8,9 +8,13 @@ from selenium.webdriver.common.by import By
 
 class RailsSampleApp(unittest.TestCase):
 
+#The setUp is part of initialization, this method will get called before every test function. Here creating instance firefox driver
+
     def setUp(self):    
         self.driver = webdriver.Firefox() 
         USERNAME ='' 
+        
+#Validating signup functionality         
         
     def test_A_sign_up(self):
         driver = self.driver
@@ -25,6 +29,8 @@ class RailsSampleApp(unittest.TestCase):
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "/html/body/div/section/div")))
         assert self.USERNAME in driver.title  
         print(self.USERNAME + ' signup validated: passed')
+        
+#Validating already existing users        
 
     def test_B_sign_up(self):
         driver = self.driver
@@ -41,6 +47,7 @@ class RailsSampleApp(unittest.TestCase):
         self.assertEqual(elem, 'Email has already been taken') 
         print('Duplicate profile not allowed: passed')
                                        
+#Validating profile signin
 
     def test_C_profile(self):
         driver = self.driver
@@ -55,7 +62,7 @@ class RailsSampleApp(unittest.TestCase):
         assert self.USERNAME in driver.title
         print('signin validated: passed')
         
-        #validating microposts and its count
+#validating microposts and its count
            
         driver.find_element_by_xpath('/html/body/div/header/nav/ul/li[1]/a').click()
         elem = driver.find_element_by_xpath('/html/body/div/section/table/tbody/tr/td[2]/div[1]/a/span[2]').text 
@@ -72,7 +79,7 @@ class RailsSampleApp(unittest.TestCase):
         self.assertEqual(i_count + 1 ,f_count) #comparing counts of posts before and after posting
         print('microposts and their counts validated: passed')
                      
-        #validating password change
+#validating password change
         
         driver.find_element_by_xpath('/html/body/div/header/nav/ul/li[5]/a').click()
         driver.find_element_by_xpath('//*[@id="user_password"]').send_keys(self.USERNAME + '1234')
@@ -81,7 +88,9 @@ class RailsSampleApp(unittest.TestCase):
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//img[@class='gravatar']"))) 
         elem = driver.find_element_by_xpath('/html/body/div/section/div').text       
         self.assertEqual(elem, 'profile updated!') 
-        print('password change validated:passed')    
+        print('password change validated:passed')  
+        
+#Validating invalid emails and prompt for new profile creation 
         
     def test_D_invalid_email(self):
         driver = self.driver
@@ -100,7 +109,7 @@ class RailsSampleApp(unittest.TestCase):
         assert 'Sign up' in driver.title 
         print('Authentication and signup href verified')  
         
-        #validating followers count and follow/unfollow button
+#validating followers count and follow/unfollow button
         
     def test_E_followers_count(self):
         driver = self.driver
@@ -121,7 +130,7 @@ class RailsSampleApp(unittest.TestCase):
         self.assertEqual('1' ,following[0])    #checking followers count                       
         print('following count and follow/unfollow button verified')
         
-        #validating help href in main page
+#validating help href in main page
 
     def test_F_help_href(self):
         driver = self.driver
@@ -133,7 +142,7 @@ class RailsSampleApp(unittest.TestCase):
         self.assertEqual(elem, 'This is Help page')
         print('Help href verified') 
         
-        #validating home href from help page      
+#validating home href from help page      
         
     def test_G_home_href(self):
         driver = self.driver
@@ -145,7 +154,7 @@ class RailsSampleApp(unittest.TestCase):
         self.assertEqual(elem, 'This is the home page')
         print('home href verified')
         
-        #validating contact href in main page       
+#validating contact href in main page       
 
     def test_H_contact_href(self):
         driver = self.driver
@@ -157,7 +166,7 @@ class RailsSampleApp(unittest.TestCase):
         self.assertEqual(elem, 'This is the contact page')                 
         print('contact href verified')
         
-        #validating about href in main page
+#validating about href in main page
         
     def test_I_about_href(self):
         driver = self.driver
@@ -167,7 +176,9 @@ class RailsSampleApp(unittest.TestCase):
         WebDriverWait(driver, 10).until(EC.invisibility_of_element_located((By.XPATH, "/html/body/div/section/span"))) 
         elem = driver.find_element_by_xpath('/html/body/div/section/p').text            
         self.assertEqual(elem, 'This is About page') 
-        print('About href verified')               
+        print('About href verified')   
+        
+#The tearDown method will get called after every test method. This is a place to do all cleanup actions.                   
                 
     def tearDown(self):
         self.driver.close()          
